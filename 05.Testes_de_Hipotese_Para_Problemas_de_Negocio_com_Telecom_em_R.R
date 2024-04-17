@@ -161,6 +161,16 @@ str(df)
 
 
 
+
+
+
+###############################################     PERGUNTAS     ###############################################    
+
+
+
+
+
+
 ## Pergunta 1:
 
 # - O consumo médio de largura de banda do mês anterior ao upgrade foi maior que 50?
@@ -255,11 +265,10 @@ if(resultado_ttest$p.value < 0.05) {
 
 
 
-
 ## Pergunta 3:
 
 # - Houve diferença de consumo de largura de banda antes e depois do upgrade, considerando o primeiro mês após o upgrade?
-#   Neste caso usaremos: Teste t de Duas Amostras (Pareado)
+#   Neste caso usaremos: Teste t de Duas Amostras (Pareado).
 
 # Este teste é usado quando temos duas amostras que são relacionadas ou dependentes. Este é um teste para a hipótese nula de que duas amostras relacionadas 
 # têm valores médios (esperados) idênticos.
@@ -295,11 +304,10 @@ if(resultado_ttest$p.value < 0.05) {
 
 
 
-
 ## Pergunta 4:
 
 # - O gênero do cliente influenciou o consumo de largura de banda no primeiro mês após o upgrade?
-#   Neste caso usaremos: Teste t de Duas Amostras Independentes
+#   Neste caso usaremos: Teste t de Duas Amostras Independentes.
 
 # Calculamos o Teste t para as médias de duas amostras independentes. Este é um teste para a hipótese nula de que 2 amostras independentes têm valores
 # médios (esperados) idênticos. Este teste assume que as populações têm variâncias idênticas por padrão.
@@ -340,10 +348,233 @@ if(resultado_ttest$p.value < 0.05) {
 
 ## Pergunta 5:
 
+# - Há alguma relação entre região e segmento do cliente?
+#   Neste caso usaremos: Teste do Qui-Quadrado.
+
+# Teste qui-quadrado de independência de variáveis é usado em uma tabela de contingência.
+# A função calcula a estatística qui-quadrado e o valor-p para o teste de hipótese de independência das frequências observadas na tabela de contingência.
+# As frequências esperadas são calculadas com base nas somas marginais sob o pressuposto de independência.
+
+# -> Quando usar: O teste do Qui-Quadrado é usado para avaliar se há uma associação significativa entre duas variáveis categóricas.
+
+# -> Por quê usar: É útil para determinar se as diferenças nas contagens ou frequências observadas em categorias são devidas ao acaso ou a uma associação
+#                  real entre as variáveis.
+
+# Motivo da escolha: O Teste do Qui-Quadrado foi escolhido porque é o método padrão para investigar a independência entre duas variáveis categóricas.
+#                    Neste caso, as variáveis são 'região' e 'segmento' do cliente. Este teste é ideal para determinar se as distribuições dos segmentos 
+#                    variam significativamente entre diferentes regiões, ou se elas são independentes uma da outra. Utilizando este teste, podemos validar 
+#                    estatisticamente se há ou não uma associação entre a localização geográfica dos clientes e seus segmentos de mercado, o que é crucial
+#                    para entender a dinâmica do mercado e para o planejamento estratégico de marketing e vendas.
+
+# Hipóteses:
+  
+#   H0: Não há relacionamento entre região e segmento.
+#   H1: Há relacionamento entre região e segmento.
+
+# Se o valor-p for menor que 0,05 rejeitamos a H0. Caso contrário, falhamos em rejeitar a H0.
 
 
 
 
+
+## Interpretando
+
+# - 
+
+
+
+
+
+
+## Pergunta 5:
+
+# - Há alguma relação entre região e segmento do cliente?
+#   Neste caso usaremos: Teste do Qui-Quadrado.
+
+# Teste qui-quadrado de independência de variáveis é usado em uma tabela de contingência.
+# A função calcula a estatística qui-quadrado e o valor-p para o teste de hipótese de independência das frequências observadas na tabela de contingência.
+# As frequências esperadas são calculadas com base nas somas marginais sob o pressuposto de independência.
+
+# -> Quando usar: O teste do Qui-Quadrado é usado para avaliar se há uma associação significativa entre duas variáveis categóricas.
+
+# -> Por quê usar: É útil para determinar se as diferenças nas contagens ou frequências observadas em categorias são devidas ao acaso ou a uma associação
+#                  real entre as variáveis.
+
+# Motivo da escolha: O Teste do Qui-Quadrado foi escolhido porque é o método padrão para investigar a independência entre duas variáveis categóricas.
+#                    Neste caso, as variáveis são 'região' e 'segmento' do cliente. Este teste é ideal para determinar se as distribuições dos segmentos 
+#                    variam significativamente entre diferentes regiões, ou se elas são independentes uma da outra. Utilizando este teste, podemos validar 
+#                    estatisticamente se há ou não uma associação entre a localização geográfica dos clientes e seus segmentos de mercado, o que é crucial
+#                    para entender a dinâmica do mercado e para o planejamento estratégico de marketing e vendas.
+
+# Hipóteses:
+
+#   H0: Não há relacionamento entre região e segmento.
+#   H1: Há relacionamento entre região e segmento.
+
+# Se o valor-p for menor que 0,05 rejeitamos a H0. Caso contrário, falhamos em rejeitar a H0.
+
+
+
+
+
+## Interpretando
+
+# - 
+
+
+
+
+
+
+## Pergunta 6:
+
+# - O uso do cartão melhorou significativamente em relação ao ano passado, que era 50?
+#   Neste caso usaremos: .
+
+
+# -> Quando usar: 
+
+# -> Por quê usar: 
+
+# Motivo da escolha:
+
+# Hipóteses:
+
+#   H0: 
+#   H1: 
+
+# Se o valor-p for menor que 0,05 rejeitamos a H0. Caso contrário, falhamos em rejeitar a H0.
+
+
+
+
+## Interpretando
+
+# - 
+
+
+
+
+
+
+## Pergunta 7:
+
+# - A última campanha foi bem-sucedida em termos de uso do cartão de crédito?
+#   Neste caso usaremos: .
+
+
+# -> Quando usar: 
+
+# -> Por quê usar: 
+
+# Motivo da escolha:
+
+# Hipóteses:
+
+#   H0: 
+#   H1: 
+
+# Se o valor-p for menor que 0,05 rejeitamos a H0. Caso contrário, falhamos em rejeitar a H0.
+
+
+
+
+## Interpretando
+
+# - 
+
+
+
+
+
+
+## Pergunta 8:
+
+# - Existe diferença de uso do cartão de crédito entre homens e mulheres?
+#   Neste caso usaremos: .
+
+
+# -> Quando usar: 
+
+# -> Por quê usar: 
+
+# Motivo da escolha:
+
+# Hipóteses:
+
+#   H0: 
+#   H1: 
+
+# Se o valor-p for menor que 0,05 rejeitamos a H0. Caso contrário, falhamos em rejeitar a H0.
+
+
+
+
+## Interpretando
+
+# - 
+
+
+
+
+
+
+## Pergunta 9:
+
+# - Existe diferença entre os segmentos de clientes em termos de uso do cartão de crédito?
+#   Neste caso usaremos: .
+
+
+# -> Quando usar: 
+
+# -> Por quê usar: 
+
+# Motivo da escolha:
+
+# Hipóteses:
+
+#   H0: 
+#   H1: 
+
+# Se o valor-p for menor que 0,05 rejeitamos a H0. Caso contrário, falhamos em rejeitar a H0.
+
+
+
+
+## Interpretando
+
+# - 
+
+
+
+
+
+
+## Pergunta 10:
+
+# - Existe uma relação entre o uso do cartão no último mês e o uso pré-campanha?
+#   Neste caso usaremos: .
+
+
+# -> Quando usar: 
+
+# -> Por quê usar: 
+
+# Motivo da escolha:
+
+# Hipóteses:
+
+#   H0: 
+#   H1: 
+
+# Se o valor-p for menor que 0,05 rejeitamos a H0. Caso contrário, falhamos em rejeitar a H0.
+
+
+
+
+## Interpretando
+
+# - 
 
 
 
