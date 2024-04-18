@@ -197,11 +197,12 @@ str(df)
 
 # -> Um valor-p de um teste t é a probabilidade de que os resultados de seus dados de amostra tenham ocorrido por acaso.
 
+
 # Executar o Teste t de Uma Amostra
 resultado_ttest <- t.test(df$consumo_medio_mes_anterior_ao_upgrade, mu = 50, alternative = "two.sided")
 resultado_ttest
 
-# Interpretação do valor-p
+# Visualizando Interpretação do valor-p
 if(resultado_ttest$p.value < 0.05) {
   cat("Rejeitamos a hipótese nula (H0).\n
       Portanto, o consumo médio de largura de banda antes do upgrade foi significativamente diferente de 50.\n")
@@ -240,12 +241,12 @@ if(resultado_ttest$p.value < 0.05) {
 
 # -> Um valor-p de um teste t é a probabilidade de que os resultados de seus dados de amostra tenham ocorrido por acaso.
 
+
 # Executar o Teste t de Uma Amostra
 resultado_ttest <- t.test(df$consumo_medio_primeiro_mes_apos_upgrade, mu = 54, alternative = "two.sided")
 resultado_ttest
 
-# Interpretação do valor-p
-# Interpretação do valor-p
+# Visualizando Interpretação do valor-p
 if(resultado_ttest$p.value < 0.05) {
   cat("Rejeitamos a hipótese nula (H0).\n",
       "Portanto, o consumo médio de largura de banda no primeiro mês após o upgrade foi significativamente maior que 54.\n")
@@ -292,12 +293,24 @@ if(resultado_ttest$p.value < 0.05) {
 
 # Se o valor-p for menor que 0,05 rejeitamos a H0. Caso contrário, falhamos em rejeitar a H0.
 
+names(df)
 
+# Executando o Teste t Pareado
+resultado <- t.test(df$consumo_medio_mensal_antes_upgrade, df$consumo_medio_primeiro_mes_apos_upgrade, paired = TRUE)
+resultado
+
+# Visualizando Interpretação do valor-p
+if(resultado$p.value < 0.05) {
+  cat("Rejeitamos a hipótese nula (H0).\n")
+} else {
+  cat("Falhamos em rejeitar a hipótese nula (H0).")
+}
 
 
 ## Interpretando
 
-# - 
+# - Como o valor-p 0.3868 é maior que 0,05, falhamos em rejeitar a hipótese nula.
+#   Logo, o consumo médio no primeiro mês após o upgrade foi similar ao consumo médio antes do upgrade.
 
 
 
@@ -334,12 +347,42 @@ if(resultado_ttest$p.value < 0.05) {
 
 # Se o valor-p for menor que 0,05 rejeitamos a H0. Caso contrário, falhamos em rejeitar a H0.
 
+names(df)
+table(df$genero)
 
+# Separando as amostras em grupos
+consumo_cliente_masculino <- df$consumo_medio_primeiro_mes_apos_upgrade[df$genero == 0]
+consumo_cliente_feminino <- df$consumo_medio_primeiro_mes_apos_upgrade[df$genero == 1]
+
+# Visualizando os primeiros resultados de cada grupo
+print(head(consumo_cliente_masculino))
+print(head(consumo_cliente_feminino))
+
+# Visualizando a média de cada grupo
+mean(consumo_cliente_masculino)
+mean(consumo_cliente_feminino)
+
+# Visualizando a variância de cada grupo
+var(consumo_cliente_masculino)
+var(consumo_cliente_feminino)
+
+# Executando o Teste t de Duas Amostras Independentes (Teste de Welch)
+resultado <- t.test(consumo_cliente_masculino, consumo_cliente_feminino, var.equal = FALSE)
+print(resultado_teste)
+
+# Interpretando o valor de p
+if (resultado$p.value < 0.05) {
+  cat("Rejeitamos a hipótese nula (H0).\n")
+  cat("Portanto, houve diferença entre o consumo masculino e o consumo feminino de largura de banda no primeiro mês após o upgrade.\n")
+} else {
+  cat("Falhamos em rejeitar a hipótese nula (H0).\n")
+}
 
 
 ## Interpretando
 
-# - 
+# - Como o valor-p 0.0003409 é menor que 0,05, rejeitamos a H0.
+#   Assim, concluímos que houve diferença entre o consumo masculino e o consumo feminino de largura de banda no primeiro mês após o upgrade.
 
 
 
@@ -596,45 +639,66 @@ if(resultado_ttest$p.value < 0.05) {
 
 
 
+### 1. Teste t de Uma Amostra
+
+## Quando usar:
+# - Este teste é utilizado quando queremos comparar a média de uma amostra com um valor conhecido ou hipotético.
+
+## Exemplo:
+# - Um fabricante de bolas de tênis afirma que suas bolas têm uma pressão interna de 2 psi. Para verificar essa afirmação, um técnico mede a pressão de
+#   uma amostra de 30 bolas. O Teste t de Uma Amostra pode ser usado para determinar se a média da pressão nas bolas da amostra é significativamente
+#   diferente de 2 psi.
+
+### 2. Teste t de Duas Amostras (Pareado)
+
+## Quando usar:
+# - Usado quando as medições são feitas em pares correlacionados, geralmente em situações de "antes e depois" ou onde os sujeitos são os mesmos sob duas
+#   condições diferentes.
+
+## Exemplo:
+# - Um grupo de pacientes recebe um medicamento para reduzir a pressão arterial e suas pressões são medidas antes e depois da medicação.
+#   O Teste t Pareado pode ser usado para determinar se houve uma mudança significativa na pressão arterial média antes e depois da administração do
+#   medicamento.
+
+### 3. Teste t de Duas Amostras Independentes
+
+## Quando usar:
+# - Este teste é apropriado quando duas amostras são independentes uma da outra e queremos comparar suas médias.
+
+## Exemplo:
+# - Dois grupos de estudantes, um usando um novo método de ensino e outro usando o método tradicional, são testados para desempenho acadêmico.
+#   O Teste t de Duas Amostras Independentes pode ser usado para ver se há uma diferença significativa nas pontuações médias entre os dois grupos.
+
+### 4. Teste do Qui-Quadrado
+
+## Quando usar: 
+# - Este teste é usado para determinar se há uma associação significativa entre duas variáveis categóricas.
+
+## Exemplo:
+# - Um pesquisador quer saber se há uma relação entre gênero (masculino e feminino) e preferência por três diferentes marcas de refrigerante.
+#   A análise Qui-Quadrado pode ser usada para ver se a preferência por marca é independente do gênero dos consumidores.
+
+### 5. Teste t de Welch
+
+## Quando usar:
+# - Similar ao teste t de duas amostras, mas não assume igualdade de variâncias entre as duas amostras. É útil quando as amostras podem ter variâncias
+#   diferentes.
+
+## Exemplo:
+# - Dois grupos de estudantes, um de uma escola rural e outro de uma escola urbana, fazem um teste padronizado. Devido à possibilidade de variâncias
+#   diferentes nas pontuações devido a contextos educacionais distintos, o Teste t de Welch pode ser usado para comparar as médias das pontuações de ambos
+#   os grupos.
+
+### 6. Teste ANOVA (Análise de Variância)
+
+## Quando usar:
+# - O teste ANOVA é usado para comparar as médias de três ou mais grupos independentes para determinar se pelo menos um dos grupos difere significativamente
+#   dos outros. É especialmente útil para testar a igualdade das médias em um design onde existem múltiplas categorias ou níveis de uma variável independente.
+
+## Exemplo:
+# - Suponha que um nutricionista queira avaliar a eficácia de três diferentes dietas na perda de peso. Um grupo de participantes é dividido aleatoriamente em 
+#   três grupos, cada um seguindo uma das dietas. Depois de três meses, o peso perdido por cada participante é registrado. O teste ANOVA pode ser usado para
+#   analisar se há diferenças significativas na média de peso perdido entre os três grupos de dietas. Se o teste ANOVA mostrar uma diferença estatisticamente
+#   significativa, testes post-hoc (como o teste de Tukey) podem ser realizados para determinar quais grupos específicos diferem entre si.
 
 
-
-
-
-
-
-# 1) Teste t de Uma Amostra
-# Exemplo: Um pesquisador deseja verificar se a temperatura média em uma cidade é diferente de 25°C. Ele coleta a temperatura média diária durante um mês
-#          e aplica um Teste t de Uma Amostra.
-
-# Motivo da escolha: O Teste t de Uma Amostra é ideal aqui porque permite comparar a média de uma amostra (temperaturas médias diárias) com um valor
-#                    específico (25°C). Este teste é usado para determinar se a média da amostra é estatisticamente diferente do valor conhecido ou
-#                    hipotético.
-
-
-# 2) Teste t de Duas Amostras (Pareado)
-# Quando usar: Este teste é utilizado quando as medições são feitas em pares correlacionados, ou seja, quando duas amostras estão relacionadas de alguma maneira (antes e depois, por exemplo).
-# 
-# Por quê usar: O Teste t Pareado é útil para reduzir a variabilidade entre as amostras que poderia ser causada por variáveis não controladas, focando na diferença dentro dos pares. Isso é especialmente útil em estudos longitudinais ou estudos que envolvem medições repetidas.
-# 
-# Exemplo: Um exemplo clássico é medir o peso de um grupo de indivíduos antes e depois de um programa de dieta de um mês. O teste pode ajudar a determinar se houve uma mudança significativa no peso médio.
-# 
-# 3) Teste t de Duas Amostras Independentes
-# Quando usar: Este teste é aplicado quando queremos comparar as médias de duas amostras independentes de duas populações.
-# 
-# Por quê usar: Ele é útil quando duas amostras são coletadas de forma independente uma da outra e queremos avaliar se existe uma diferença estatisticamente significativa entre suas médias.
-# 
-# Exemplo: Por exemplo, comparar o desempenho médio de alunos de duas escolas diferentes em um teste padrão ou a eficácia de dois diferentes tipos de medicamentos em dois grupos de pacientes distintos.
-# 
-# 4) Teste do Qui-Quadrado
-# Quando usar: O teste do Qui-Quadrado é usado para avaliar se há uma associação significativa entre duas variáveis categóricas.
-# 
-# Por quê usar: É útil para determinar se as diferenças nas contagens ou frequências observadas em categorias são devidas ao acaso ou a uma associação real entre as variáveis.
-# 
-# Exemplo: Avaliar se o gênero (masculino, feminino) está associado à preferência por um novo produto. Outro exemplo seria testar se a escolha de curso universitário é independente do país de origem do estudante.
-# 
-# 5) Comparação de Proporção vs. Comparação de Média
-# Necessidade de Distinção: Sim, é crucial saber se estamos comparando proporções ou médias:
-#   
-#   Comparação de proporções: Usada quando estamos interessados em comparar as proporções (percentagens) entre grupos. Testes típicos incluem o teste z para proporções e o teste do Qui-Quadrado.
-# Comparação de médias: Usada quando queremos comparar médias numéricas entre grupos. Testes típicos incluem os testes t (uma amostra, duas amostras pareadas, duas amostras independentes).
