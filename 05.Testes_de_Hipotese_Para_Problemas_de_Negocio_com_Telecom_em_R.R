@@ -83,7 +83,7 @@ library(randomForest)
 
 #### Novas Perguntas:
 
-## 6) O uso do cartão melhorou significativamente em relação ao ano passado, que era 50?
+## 6) Houve melhoria significativa no consumo médio do segundo mês após o upgrade em comparação ao consumo medio mensal antes do upgrade?
 #     (Neste caso usaremos: )
 
 ## 7) A última campanha foi bem-sucedida em termos de uso do cartão de crédito?
@@ -416,53 +416,26 @@ if (resultado$p.value < 0.05) {
 
 # Se o valor-p for menor que 0,05 rejeitamos a H0. Caso contrário, falhamos em rejeitar a H0.
 
+str(df)
 
+# Verifica tabela de contigência
+table(df$segmento, df$regiao)
 
+# Executa o teste
+resultado = chisq.test(table(df$segmento, df$regiao))
 
-
-## Interpretando
-
-# - 
-
-
-
-
-
-
-## Pergunta 5:
-
-# - Há alguma relação entre região e segmento do cliente?
-#   Neste caso usaremos: Teste do Qui-Quadrado.
-
-# Teste qui-quadrado de independência de variáveis é usado em uma tabela de contingência.
-# A função calcula a estatística qui-quadrado e o valor-p para o teste de hipótese de independência das frequências observadas na tabela de contingência.
-# As frequências esperadas são calculadas com base nas somas marginais sob o pressuposto de independência.
-
-# -> Quando usar: O teste do Qui-Quadrado é usado para avaliar se há uma associação significativa entre duas variáveis categóricas.
-
-# -> Por quê usar: É útil para determinar se as diferenças nas contagens ou frequências observadas em categorias são devidas ao acaso ou a uma associação
-#                  real entre as variáveis.
-
-# Motivo da escolha: O Teste do Qui-Quadrado foi escolhido porque é o método padrão para investigar a independência entre duas variáveis categóricas.
-#                    Neste caso, as variáveis são 'região' e 'segmento' do cliente. Este teste é ideal para determinar se as distribuições dos segmentos 
-#                    variam significativamente entre diferentes regiões, ou se elas são independentes uma da outra. Utilizando este teste, podemos validar 
-#                    estatisticamente se há ou não uma associação entre a localização geográfica dos clientes e seus segmentos de mercado, o que é crucial
-#                    para entender a dinâmica do mercado e para o planejamento estratégico de marketing e vendas.
-
-# Hipóteses:
-
-#   H0: Não há relacionamento entre região e segmento.
-#   H1: Há relacionamento entre região e segmento.
-
-# Se o valor-p for menor que 0,05 rejeitamos a H0. Caso contrário, falhamos em rejeitar a H0.
-
-
-
+# Interpretando o valor de p
+if (resultado$p.value < 0.05) {
+  cat("Rejeitamos a hipótese nula (H0).\n")
+} else {
+  cat("Falhamos em rejeitar a hipótese nula (H0).\n")
+}
 
 
 ## Interpretando
 
-# - 
+# - Interpretando o valor de p (tabela sem totais)
+#   Como o valor-p 0.002307 menor que 0.05, rejeitamos a H0 e podemos dizer que há relação entre região e segmento do cliente.
 
 
 
@@ -471,22 +444,42 @@ if (resultado$p.value < 0.05) {
 
 ## Pergunta 6:
 
-# - O uso do cartão melhorou significativamente em relação ao ano passado, que era 50?
+# - Houve melhoria significativa no consumo médio do segundo mês após o upgrade em comparação ao consumo medio mensal antes do upgrade?
 #   Neste caso usaremos: .
 
 
-# -> Quando usar: 
+# -> Por quê usar: É apropriado para comparar medidas de consumo em dois momentos diferentes (antes e após o upgrade) nos mesmos indivíduos ou unidades.
 
-# -> Por quê usar: 
-
-# Motivo da escolha:
+# Motivo da escolha: Esta análise pode ajudar a determinar se os efeitos do upgrade foram sustentados ao longo do tempo, ao invés de apenas uma melhoria 
+#                    imediata no primeiro mês.
 
 # Hipóteses:
 
-#   H0: 
-#   H1: 
+#  H0: O consumo antes do upgrade foi igual ao consumo após o segundo mês após o upgrade (as médias são iguais).
+#  H1: O consumo antes do upgrade foi diferente do consumo após o segundo mês após o upgrade (as médias não são iguais).
 
 # Se o valor-p for menor que 0,05 rejeitamos a H0. Caso contrário, falhamos em rejeitar a H0.
+
+names(df)
+
+# Executando o Teste t Pareado
+resultado <- t.test(df$consumo_medio_mensal_antes_upgrade, df$consumo_medio_segundo_mes_apos_upgrade, paired = TRUE)
+resultado
+
+# Visualizando Interpretação do valor-p
+if(resultado$p.value < 0.05) {
+  cat("Rejeitamos a hipótese nula (H0).\n")
+} else {
+  cat("Falhamos em rejeitar a hipótese nula (H0).")
+}
+
+
+## Interpretando
+
+# - Como o valor-p 4.296e-16 é menor que 0,05, rejeitamos a hipótese nula.
+#   Logo, o consumo médio no segundo mês após o upgrade foi diferente do consumo médio antes do upgrade.
+
+
 
 
 
