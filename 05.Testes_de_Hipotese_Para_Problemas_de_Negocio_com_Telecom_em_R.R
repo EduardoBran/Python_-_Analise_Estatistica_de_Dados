@@ -84,18 +84,15 @@ library(randomForest)
 #### Novas Perguntas:
 
 ## 6) Houve melhoria significativa no consumo médio do segundo mês após o upgrade em comparação ao consumo medio mensal antes do upgrade?
+#     (Neste caso usaremos: Teste t de Duas Amostras (Pareado))
+
+## 7) Existe diferença de uso do cartão de crédito entre homens e mulheres?
+#     (Neste caso usaremos: Teste t de Duas Amostras Independentes)
+
+## 8) Existe diferença entre os segmentos de clientes em termos de uso do cartão de crédito?
 #     (Neste caso usaremos: )
 
-## 7) A última campanha foi bem-sucedida em termos de uso do cartão de crédito?
-#     (Neste caso usaremos: )
-
-## 8) Existe diferença de uso do cartão de crédito entre homens e mulheres?
-#     (Neste caso usaremos: )
-
-## 9) Existe diferença entre os segmentos de clientes em termos de uso do cartão de crédito?
-#     (Neste caso usaremos: )
-
-## 10) Existe uma relação entre o uso do cartão no último mês e o uso pré-campanha?
+## 9) Existe uma relação entre o uso do cartão no último mês e o uso pré-campanha?
 #      (Neste caso usaremos: )
 
 
@@ -368,7 +365,7 @@ var(consumo_cliente_feminino)
 
 # Executando o Teste t de Duas Amostras Independentes (Teste de Welch)
 resultado <- t.test(consumo_cliente_masculino, consumo_cliente_feminino, var.equal = FALSE)
-print(resultado_teste)
+print(resultado)
 
 # Interpretando o valor de p
 if (resultado$p.value < 0.05) {
@@ -484,40 +481,83 @@ if(resultado$p.value < 0.05) {
 
 
 
-## Interpretando
-
-# - 
-
-
-
-
-
-
 ## Pergunta 7:
 
-# - A última campanha foi bem-sucedida em termos de uso do cartão de crédito?
-#   Neste caso usaremos: .
+# - Existe diferença de uso do cartão de crédito entre homens e mulheres?
+#   Neste caso usaremos: Teste t de Duas Amostras Independentes.
 
 
-# -> Quando usar: 
+# -> Quando usar: Este teste é apropriado quando queremos comparar as médias de duas amostras independentes.
 
-# -> Por quê usar: 
+# -> Por quê usar: O teste é útil para avaliar se existe uma diferença estatisticamente significativa entre os dois grupos que não estão relacionados entre
+#                  si, como é o caso de grupos separados por gênero.
 
-# Motivo da escolha:
+# Motivo da escolha: Este teste foi escolhido porque permite uma comparação direta entre os dois grupos independentes - homens e mulheres - em termos de uso
+#                    do cartão de crédito medido pelo consumo médio. Ele é ideal para identificar diferenças baseadas em características demográficas nos
+#                    dados.
 
 # Hipóteses:
 
-#   H0: 
-#   H1: 
+#   H0: Não existe diferença no consumo médio do cartão de crédito entre homens e mulheres (as médias de consumo são iguais entre os gêneros).
+#   H1: Existe uma diferença no consumo médio do cartão de crédito entre homens e mulheres (as médias de consumo não são iguais entre os gêneros).
 
 # Se o valor-p for menor que 0,05 rejeitamos a H0. Caso contrário, falhamos em rejeitar a H0.
 
+names(df)
+
+
+## Verificando Diferença No Consumo Médio Mensal Antes do Upgrade
+
+# Separando as amostras em grupos
+consumo_cliente_masculino_au <- df$consumo_medio_mensal_antes_upgrade[df$genero == 0]
+consumo_cliente_feminino_au <- df$consumo_medio_mensal_antes_upgrade[df$genero == 1]
+
+# Visualizando a média de cada grupo
+mean(consumo_cliente_masculino_au)
+mean(consumo_cliente_feminino_au)
+
+# Executando o Teste t de Duas Amostras Independentes (Teste de Welch)
+resultado <- t.test(consumo_cliente_masculino_au, consumo_cliente_feminino_au, var.equal = FALSE)
+print(resultado)
+
+
+## Interpretando
+
+# - Como o valor-p 0.4572 é maior que 0.05, falhamos em rejeitar a H0 e podemos dizer que estatisticamente não houve diferença entre o consumo masculino
+#   e o consumo feminino mensal antes do upgrade.
+
+
+## Verificando Diferença No Consumo Médio do Segundo Mês Após o Upgrade
+
+# Separando as amostras em grupos
+consumo_cliente_masculino_du <- df$consumo_medio_segundo_mes_apos_upgrade[df$genero == 0]
+consumo_cliente_feminino_du <- df$consumo_medio_segundo_mes_apos_upgrade[df$genero == 1]
+
+# Visualizando a média de cada grupo
+mean(consumo_cliente_masculino_du)
+mean(consumo_cliente_feminino_du)
+
+# Executando o Teste t de Duas Amostras Independentes (Teste de Welch)
+resultado <- t.test(consumo_cliente_masculino_du, consumo_cliente_feminino_du, var.equal = FALSE)
+print(resultado)
+
+
+
+rm(consumo_cliente_masculino_au, consumo_cliente_feminino_au, consumo_cliente_masculino_du, consumo_cliente_feminino_du)
 
 
 
 ## Interpretando
 
-# - 
+# - Como o valor-p 0.0003409 é menor que 0,05, rejeitamos a H0. Assim, concluímos que estatisticamente houve diferença entre o consumo masculino e o
+#   consumo feminino mensal depois do segundo mês do upgrade
+
+
+## CONCLUSÃO
+
+# - Com base nos resultados dos testes, podemos concluir que estatisticamente não houve diferença significativa no uso do cartão de crédito entre homens e
+#   mulheres antes do upgrade, mas uma diferença significativa foi observada após o upgrade no segundo mês, indicando um possível impacto diferenciado do
+#   upgrade entre os gêneros.
 
 
 
@@ -525,37 +565,6 @@ if(resultado$p.value < 0.05) {
 
 
 ## Pergunta 8:
-
-# - Existe diferença de uso do cartão de crédito entre homens e mulheres?
-#   Neste caso usaremos: .
-
-
-# -> Quando usar: 
-
-# -> Por quê usar: 
-
-# Motivo da escolha:
-
-# Hipóteses:
-
-#   H0: 
-#   H1: 
-
-# Se o valor-p for menor que 0,05 rejeitamos a H0. Caso contrário, falhamos em rejeitar a H0.
-
-
-
-
-## Interpretando
-
-# - 
-
-
-
-
-
-
-## Pergunta 9:
 
 # - Existe diferença entre os segmentos de clientes em termos de uso do cartão de crédito?
 #   Neste caso usaremos: .
@@ -586,7 +595,7 @@ if(resultado$p.value < 0.05) {
 
 
 
-## Pergunta 10:
+## Pergunta 9:
 
 # - Existe uma relação entre o uso do cartão no último mês e o uso pré-campanha?
 #   Neste caso usaremos: .
