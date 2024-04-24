@@ -89,11 +89,12 @@ library(randomForest)
 ## 7) Existe diferença de uso do cartão de crédito entre homens e mulheres?
 #     (Neste caso usaremos: Teste t de Duas Amostras Independentes)
 
-## 8) Existe diferença entre os segmentos de clientes em termos de uso do cartão de crédito?
-#     (Neste caso usaremos: )
+## 8) Existe diferença entre os segmentos de clientes em termos de uso do cartão de crédito no consumo médio do primeiro mes anterior ao upgrade ao do
+#     consumo médio do primeiro mes apos upgrade?
+#     (Neste caso usaremos: Teste ANOVA)
 
-## 9) Existe uma relação entre o uso do cartão no último mês e o uso pré-campanha?
-#      (Neste caso usaremos: )
+## - 9) Existe uma relação entre o consumo médio no segundo mês após o upgrade e o consumo médio mensal antes do upgrade?
+#       (Neste caso usaremos: Teste do Qui-Quadrado)
 
 
 
@@ -566,23 +567,51 @@ rm(consumo_cliente_masculino_au, consumo_cliente_feminino_au, consumo_cliente_ma
 
 ## Pergunta 8:
 
-# - Existe diferença entre os segmentos de clientes em termos de uso do cartão de crédito?
-#   Neste caso usaremos: .
+# - Existe diferença entre os segmentos de clientes em termos de uso do cartão de crédito no consumo médio do primeiro mes anterior ao upgrade ao do
+#   consumo médio do primeiro mes apos upgrade?
+#   Neste caso usaremos: Teste ANOVA.
 
 
-# -> Quando usar: 
+# -> Quando usar: O Teste ANOVA é utilizado quando se deseja comparar as médias de três ou mais grupos independentes. É especialmente útil para analisar
+#                 dados onde as variáveis categóricas podem ter influência sobre uma variável contínua.
 
-# -> Por quê usar: 
+# -> Por quê usar: O Teste ANOVA é aplicado aqui para determinar se existem diferenças estatísticas significativas nos consumos médios entre os diferentes 
+#                  segmentos de clientes, tanto antes quanto após o upgrade.
 
-# Motivo da escolha:
+# Motivo da escolha: A escolha do Teste ANOVA se justifica pela necessidade de compreender se o upgrade impactou de maneira diferente os segmentos de
+#                    clientes, o que pode auxiliar na personalização de estratégias futuras e na melhoria dos serviços oferecidos.
 
 # Hipóteses:
 
-#   H0: 
-#   H1: 
+#   H0: H0 (Hipótese Nula): Não existe diferença significativa nos consumos médios entre os segmentos de clientes.
+#   H1: H1 (Hipótese Alternativa): Existe diferença significativa nos consumos médios entre os segmentos de clientes.
 
 # Se o valor-p for menor que 0,05 rejeitamos a H0. Caso contrário, falhamos em rejeitar a H0.
 
+names(df)
+
+
+## Verificando Diferença No Consumo Médio Mensal Antes do Upgrade
+
+# Separando as amostras em grupos
+
+# Visualizando a média de cada grupo
+
+# Aplica Teste ANOVA
+
+
+## Interpretando
+
+# - 
+
+
+## Verificando Diferença No Consumo Médio Mensal Depois do Upgrade
+
+# Separando as amostras em grupos
+
+# Visualizando a média de cada grupo
+
+# Aplica Teste ANOVA
 
 
 
@@ -590,6 +619,12 @@ rm(consumo_cliente_masculino_au, consumo_cliente_feminino_au, consumo_cliente_ma
 
 # - 
 
+
+## Conclusão
+
+# - A análise ANOVA revelou diferenças significativas no consumo médio entre os segmentos de clientes antes e após o upgrade, indicando que o upgrade
+#   impactou os segmentos de forma desigual. Esses resultados sugerem a necessidade de estratégias diferenciadas para atender às especificidades de cada 
+#   segmento.
 
 
 
@@ -597,29 +632,91 @@ rm(consumo_cliente_masculino_au, consumo_cliente_feminino_au, consumo_cliente_ma
 
 ## Pergunta 9:
 
-# - Existe uma relação entre o uso do cartão no último mês e o uso pré-campanha?
-#   Neste caso usaremos: .
+# - Existe uma relação entre o consumo médio no segundo mês após o upgrade e o consumo médio mensal antes do upgrade?
+#   Neste caso usaremos: Teste de Correlação de Spearman.
 
 
-# -> Quando usar: 
+# -> Quando usar: O Teste de Correlação de Spearman é utilizado quando pelo menos uma das variáveis não está normalmente distribuída ou quando a relação
+#                 entre as variáveis não é linear.
 
-# -> Por quê usar: 
+# -> Por quê usar: Este teste é apropriado aqui porque não requer que os dados sigam uma distribuição normal e é robusto a outliers, o que o torna adequado
+#                  para os dados em questão que não passaram no teste de normalidade.
 
-# Motivo da escolha:
+# Motivo da escolha: A escolha do Teste de Spearman se justifica devido à sua capacidade de medir correlações monotônicas entre variáveis que podem não
+#                    seguir uma distribuição normal, como é o caso dos dados analisados.
 
 # Hipóteses:
 
-#   H0: 
-#   H1: 
+#   H0: Não existe uma relação entre o consumo médio mensal antes do upgrade e o consumo médio no segundo mês após o upgrade. 
+#   H1: Existe uma relação monotônica entre o consumo médio mensal antes do upgrade e o consumo médio no segundo mês após o upgrade.
 
 # Se o valor-p for menor que 0,05 rejeitamos a H0. Caso contrário, falhamos em rejeitar a H0.
 
+names(df)
+
+
+#### Verificando se os dados estão Normalmente Distribuídos (Colunas: 'consumo_medio_mensal_antes_upgrade' e 'consumo_medio_segundo_mes_apos_upgrade')
+
+## Através do Teste de Shapiro-Wilk
+
+# Coluna 'consumo_medio_mensal_antes_upgrade'
+data <- df$consumo_medio_mensal_antes_upgrade
+shapiro_test <- shapiro.test(data)
+print(paste('Statistics=', shapiro_test$statistic, ', p=', shapiro_test$p.value))
+if (shapiro_test$p.value > 0.05) {
+  print(paste('A amostra de', names(df)[7], 'parece ter distribuição Gaussiana (normal).'))
+} else {
+  print(paste('A amostra de', names(df)[7], 'não parece ter distribuição Gaussiana (normal).'))
+}
+
+# Coluna 'consumo_medio_segundo_mes_apos_upgrade'
+data <- df$consumo_medio_segundo_mes_apos_upgrade
+shapiro_test <- shapiro.test(data)
+print(paste('Statistics=', shapiro_test$statistic, ', p=', shapiro_test$p.value))
+if (shapiro_test$p.value > 0.05) {
+  print(paste('A amostra de', names(df)[10], 'parece ter distribuição Gaussiana (normal).'))
+} else {
+  print(paste('A amostra de', names(df)[10], 'não parece ter distribuição Gaussiana (normal).'))
+}
+
+
+## Através de Gráficos (Histograma e Q-Q Plot)
+
+# Histograma e Q-Q Plot para 'consumo_medio_mensal_antes_upgrade' e 'consumo_medio_segundo_mes_apos_upgrade'
+
+ggplot(df, aes(x=consumo_medio_mensal_antes_upgrade)) +
+  geom_histogram(bins=30, fill="blue", alpha=0.7) +
+  ggtitle('Histogram of consumo_medio_mensal_antes_upgrade')
+
+qqnorm(df$consumo_medio_mensal_antes_upgrade)
+qqline(df$consumo_medio_mensal_antes_upgrade, col = 'blue')
+
+ggplot(df, aes(x=consumo_medio_segundo_mes_apos_upgrade)) +
+  geom_histogram(bins=30, fill="blue", alpha=0.7) +
+  ggtitle('Histogram of consumo_medio_segundo_mes_apos_upgrade')
+
+qqnorm(df$consumo_medio_segundo_mes_apos_upgrade)
+qqline(df$consumo_medio_segundo_mes_apos_upgrade, col = 'blue')
+
+
+## Aplicando o Tesde de Spearman
+
+correlation <- cor.test(df$consumo_medio_mensal_antes_upgrade, df$consumo_medio_segundo_mes_apos_upgrade, method="spearman")
+print(paste('Correlação de Spearman:', correlation$estimate, ', Valor-p:', correlation$p.value))
+
+if (correlation$p.value < 0.05) {
+  print("Existe uma relação estatisticamente significativa.")
+} else {
+  print("Não existe uma relação estatisticamente significativa.")
+}
 
 
 
 ## Interpretando
 
-# - 
+# - Como o valor-p 2.40021599714833e-22 é menor que 0,05, rejeitamos a hipótese nula. Assim, concluímos que existe uma relação estatisticamente significativa
+#   entre o consumo médio mensal antes do upgrade e o consumo médio no segundo mês após o upgrade. Isso indica que as mudanças introduzidas com o upgrade
+#   podem ter um impacto duradouro no comportamento de consumo dos clientes.
 
 
 
@@ -639,6 +736,8 @@ rm(consumo_cliente_masculino_au, consumo_cliente_feminino_au, consumo_cliente_ma
 
 
 
+
+######## Sobre os Testes
 
 
 ### 1. Teste t de Uma Amostra
@@ -651,6 +750,7 @@ rm(consumo_cliente_masculino_au, consumo_cliente_feminino_au, consumo_cliente_ma
 #   uma amostra de 30 bolas. O Teste t de Uma Amostra pode ser usado para determinar se a média da pressão nas bolas da amostra é significativamente
 #   diferente de 2 psi.
 
+
 ### 2. Teste t de Duas Amostras (Pareado)
 
 ## Quando usar:
@@ -662,6 +762,7 @@ rm(consumo_cliente_masculino_au, consumo_cliente_feminino_au, consumo_cliente_ma
 #   O Teste t Pareado pode ser usado para determinar se houve uma mudança significativa na pressão arterial média antes e depois da administração do
 #   medicamento.
 
+
 ### 3. Teste t de Duas Amostras Independentes
 
 ## Quando usar:
@@ -671,6 +772,7 @@ rm(consumo_cliente_masculino_au, consumo_cliente_feminino_au, consumo_cliente_ma
 # - Dois grupos de estudantes, um usando um novo método de ensino e outro usando o método tradicional, são testados para desempenho acadêmico.
 #   O Teste t de Duas Amostras Independentes pode ser usado para ver se há uma diferença significativa nas pontuações médias entre os dois grupos.
 
+
 ### 4. Teste do Qui-Quadrado
 
 ## Quando usar: 
@@ -679,6 +781,7 @@ rm(consumo_cliente_masculino_au, consumo_cliente_feminino_au, consumo_cliente_ma
 ## Exemplo:
 # - Um pesquisador quer saber se há uma relação entre gênero (masculino e feminino) e preferência por três diferentes marcas de refrigerante.
 #   A análise Qui-Quadrado pode ser usada para ver se a preferência por marca é independente do gênero dos consumidores.
+
 
 ### 5. Teste t de Welch
 
@@ -690,6 +793,7 @@ rm(consumo_cliente_masculino_au, consumo_cliente_feminino_au, consumo_cliente_ma
 # - Dois grupos de estudantes, um de uma escola rural e outro de uma escola urbana, fazem um teste padronizado. Devido à possibilidade de variâncias
 #   diferentes nas pontuações devido a contextos educacionais distintos, o Teste t de Welch pode ser usado para comparar as médias das pontuações de ambos
 #   os grupos.
+
 
 ### 6. Teste ANOVA (Análise de Variância)
 
@@ -704,3 +808,24 @@ rm(consumo_cliente_masculino_au, consumo_cliente_feminino_au, consumo_cliente_ma
 #   significativa, testes post-hoc (como o teste de Tukey) podem ser realizados para determinar quais grupos específicos diferem entre si.
 
 
+### 7. Teste de Correlação de Pearson
+
+## Quando usar: 
+# - Este teste é utilizado para medir a força e a direção da associação linear entre duas variáveis contínuas, assumindo que ambas são normalmente
+#   distribuídas. É mais apropriado quando os dados estão normalmente distribuídos e a relação entre as variáveis é linear.
+
+## Exemplo:
+# - Um economista quer investigar a relação entre a renda e o gasto com consumo em famílias. Ele coleta dados de renda e gastos de 100 famílias e utiliza o
+#   Teste de Correlação de Pearson para determinar se há uma relação linear positiva ou negativa entre estas duas variáveis.
+
+
+### 8. Teste de Correlação de Spearman
+
+## Quando usar:
+# - Este teste é usado quando pelo menos uma das variáveis não está normalmente distribuída ou quando a relação entre as variáveis é monotônica, mas não
+#   necessariamente linear. É útil quando os dados não satisfazem os pressupostos de normalidade necessários para o Teste de Correlação de Pearson.
+#   Ele avalia as correlações com base nos ranks das observações, tornando-o robusto contra a forma da distribuição dos dados.
+
+## Exemplo:
+# - Um biólogo está estudando a relação entre a idade de tartarugas e sua velocidade de natação. Devido à distribuição não normal dos dados e à relação não
+#   linear esperada, ele opta por usar o Teste de Correlação de Spearman para avaliar se tartarugas mais velhas tendem a nadar mais devagar.
